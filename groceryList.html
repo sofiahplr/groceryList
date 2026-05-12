@@ -1,17 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grocery List</title>
 </head>
 <body>
     <h1>My Grocery List</h1>
     <main> 
-        <section> <button> Add food</button> </section>
+        <section> 
+            <input id="itemToAdd">
+            <button onclick="addItem()">Add food</button> 
+        </section>
         
-        <section> <button> Delete List</button> </section>
-        <ul>
-            
-        </ul>
+        <section> <button onclick="clearList()">Delete List</button> </section>
+        
+        <ul id="firstList"></ul>
+        <script src="groceryList.js"></script>
+
     </main>
 
 </body>
