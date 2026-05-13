@@ -4,17 +4,30 @@
 // make list item and append text into li (ex. <li>itemText</li>)
 // now add that list element and append to the unorderedlist
 function addItem() {
-    var item = document.getElementById("itemToAdd").value 
+    var itemInput = document.getElementById("itemToAdd")
+    var item = itemInput.value.trim()
 
+    // check if its empty
     if (!item) {
         alert("Please enter an item")
         return;
+    }
+
+    var allItems = document.getElementById("firstList").getElementsByTagName("li")
+    
+    for(let i = 0; i < allItems.length; i++) {
+        if (allItems[i].textContent.toLowerCase() === item.toLowerCase()) {
+            alert("This is already on the list")
+            return;
+        }
     }
 
     var text = document.createTextNode(item)
     var newItem = document.createElement("li")
     newItem.appendChild(text)
     document.getElementById("firstList").appendChild(newItem)
+
+    itemInput.value = ""
 }
 
 function clearList() {
