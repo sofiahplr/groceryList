@@ -1,0 +1,49 @@
+
+// Add item to List
+// get the element in input, turn it into a text, make a list item
+// make list item and append text into li (ex. <li>itemText</li>)
+// now add that list element and append to the unorderedlist
+function addItem() {
+    var itemInput = document.getElementById("itemToAdd");
+    var item = itemInput.value.trim();
+
+    // check if its empty
+    if (!item) {
+        alert("Please enter an item");
+        return;
+    }
+
+    // checks for duplicates
+    var allItems = document.getElementById("firstList").getElementsByTagName("li");
+    var currentItem = item.toLowerCase();
+    for(let i = 0; i < allItems.length; i++) {
+        if (allItems[i].textContent.toLowerCase() === currentItem) {
+            alert("This is already on the list");
+            return;
+        }
+    }
+
+    var text = document.createTextNode(item);
+    var newItem = document.createElement("li");
+    newItem.appendChild(text);
+
+    // adding marking when items are bought
+    newItem.onclick = function () {
+        markAsBought(this);
+    }
+
+    document.getElementById("firstList").appendChild(newItem);
+
+    itemInput.value = "";
+}
+
+function markAsBought(element) {
+    element.classList.toggle("bought")
+}
+
+function clearList() {
+    var yes = confirm("Are you sure you want to delete this list?");
+    if (yes) {
+        document.getElementById("firstList").innerHTML = "";
+    }
+}
