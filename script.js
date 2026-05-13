@@ -37,6 +37,12 @@ function addItem() {
     itemInput.value = "";
 }
 
+document.getElementById("itemToAdd").addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+        addItem();
+    }
+})
+
 function markAsBought(element) {
     element.classList.toggle("bought")
 }
