@@ -12,3 +12,7 @@ li.bought {
     color: gray;
     opacity: 0.6;
 }
+
+.hidden {
+    display: none;
+}

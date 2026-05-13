@@ -47,6 +47,20 @@ function markAsBought(element) {
     element.classList.toggle("bought")
 }
 
+function showInput() {
+    var input = document.getElementById("itemToAdd");
+    var button = document.getElementById("showInputBtn");
+
+    if (input.classList.contains("hidden")) {
+        input.classList.remove("hidden");
+        button.textContent = "Done";
+        input.focus(); // makes the cursor jump into it
+    } else {
+        input.classList.add("hidden");
+        button.textContent = "Add Food";
+    }
+}
+
 function clearList() {
     var yes = confirm("Are you sure you want to delete this list?");
     if (yes) {
