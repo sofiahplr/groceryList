@@ -1,6 +1,7 @@
 
 ul {
     list-style-type: none;
+    padding-left: 1%;
 }
 
 li {
@@ -15,4 +16,26 @@ li.bought {
 
 .hidden {
     display: none;
+}
+
+.rows {
+    position: relative;
+}
+
+.columns {
+    
+}
+
+
+.columns-two {
+    display:block;
+    width: 100px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.columns-two button {
+    font-size: medium;
+    margin-bottom: 10px;
 }

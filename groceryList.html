@@ -7,19 +7,24 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>My Grocery List</h1>
-    <main> 
-        <section> 
+    <div> 
+        <h1>My Grocery List</h1>
+    </div>
+    
+    <main class="rows">
+        <div class="columns"> 
             <input id="itemToAdd" type="text" class="hidden">
+            <ul id="firstList"></ul>
+        </div>
+            
+        <div class="columns-two"> 
             <button id= "showInputBtn" onclick="showInput()">Add Food</button> 
-        </section>
-        
-        <section> <button onclick="clearList()">Delete List</button> </section>
-        
-        <ul id="firstList"></ul>
-        <script src="script.js"></script>
-
+            <button onclick="clearList()">Delete List</button> 
+        </div>
+            
     </main>
+
+    <script src="script.js"></script>
 
 </body>
 </html>
