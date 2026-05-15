@@ -2,6 +2,7 @@
 ul {
     list-style-type: none;
     padding-left: 1%;
+    margin-top: 3px;
 }
 
 li {
@@ -19,23 +20,22 @@ li.bought {
 }
 
 .rows {
-    position: relative;
+    position: relative; /* makes rows the position reference for columns*/
 }
 
-.columns {
+/*.columns {
     
-}
+}               
+*/
 
-
-.columns-two {
-    display:block;
-    width: 100px;
+.columns-two { /* relies on .rows position */
     position: absolute;
     right: 0;
     top: 0;
 }
 
 .columns-two button {
+    display: block;
     font-size: medium;
     margin-bottom: 10px;
 }
