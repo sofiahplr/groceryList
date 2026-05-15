@@ -30,7 +30,7 @@ li.bought {
 
 .columns-two { /* relies on .rows position */
     position: absolute;
-    right: 0;
+    right: 3px;
     top: 0;
 }
 
@@ -39,3 +39,12 @@ li.bought {
     font-size: medium;
     margin-bottom: 10px;
 }
+
+.container {
+    background-color: rgb(241, 229, 241);
+    min-height: 650px;
+    width: 500px;
+    margin: 0 auto;
+    padding-top: 10px;
+    padding-inline: 10px;
+} /* fix container to be adaptable on web, do edit page*/

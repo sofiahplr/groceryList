@@ -8,22 +8,25 @@
 </head>
 
 <body>
-    <div> 
-        <h1>My Grocery List</h1>
+    <div class="container">
+        <div> 
+            <h1>My Grocery List</h1>
+        </div>
+        
+        <main class="rows">
+            <div class="columns"> 
+                <input id="itemToAdd" type="text" class="hidden">
+                <ul id="firstList"></ul>
+            </div>
+                
+            <div class="columns-two"> 
+                <button id= "showInputBtn" onclick="showInput()">Add Food</button> 
+                <button onclick="clearList()">Delete List</button> 
+            </div>
+                
+        </main>
+
     </div>
-    
-    <main class="rows">
-        <div class="columns"> 
-            <input id="itemToAdd" type="text" class="hidden">
-            <ul id="firstList"></ul>
-        </div>
-            
-        <div class="columns-two"> 
-            <button id= "showInputBtn" onclick="showInput()">Add Food</button> 
-            <button onclick="clearList()">Delete List</button> 
-        </div>
-            
-    </main>
 
     <script src="script.js"></script>
 
