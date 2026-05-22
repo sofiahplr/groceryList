@@ -7,10 +7,12 @@ ul {
 
 li {
     cursor: pointer;
+    border-bottom: 1px solid #e29d9d;
 }
 
 li.bought {
     text-decoration: line-through;
+    border-bottom: 1px solid rgb(216, 193, 216);
     color: gray;
     opacity: 0.6;
 }
@@ -23,10 +25,9 @@ li.bought {
     position: relative; /* makes rows the position reference for columns*/
 }
 
-/*.columns {
-    
+.columns {
+    max-width: 390px;
 }               
-*/
 
 .columns-two { /* relies on .rows position */
     position: absolute;

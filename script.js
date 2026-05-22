@@ -32,6 +32,8 @@ function addItem() {
         markAsBought(this);
     }
 
+    addSwipeFeature(newItem);
+
     document.getElementById("firstList").appendChild(newItem);
 
     itemInput.value = "";
@@ -45,6 +47,10 @@ document.getElementById("itemToAdd").addEventListener("keydown", function (event
 
 function markAsBought(element) {
     element.classList.toggle("bought")
+}
+
+function addSwipeFeature(item){
+    
 }
 
 function showInput() {
