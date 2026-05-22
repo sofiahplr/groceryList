@@ -50,7 +50,43 @@ function markAsBought(element) {
 }
 
 function addSwipeFeature(item){
-    
+    let startPos = 0;
+    let currentPos = 0;
+    let isDragging = false;
+
+    item.addEventListener("pointerdown", (e) => {
+        isDragging = true;
+        startPos = e.clientX;
+
+        item.setPointerCapture(e.pointerId);
+    })
+
+    item.addEventListener("pointermove", (e) => {
+        if (!isDragging) return;
+
+        currentPos = e.clientX;
+        
+        let distance = currentPos - startPos;
+
+        if (distance < 0) {
+            item.style.transform = `translateX(${distance}px)`;
+        } 
+    })
+
+    item.addEventListener("pointerup", (e) => {
+        if(!isDragging) return;
+
+        isDragging = false;
+
+        let distance = currentPos - startPos;
+
+        if(distance < -100) {
+            item.remove()
+        } else {
+            item.style.transform = "translateX(0px)";
+        }
+
+    })
 }
 
 function showInput() {
