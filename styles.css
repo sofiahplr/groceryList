@@ -5,10 +5,12 @@ ul {
     margin-top: 1px; /* distance of ul from input box */
 }
 
-li {
+.topLayer {
     cursor: pointer;
     border-bottom: 1px solid #e29d9d;
     background:  rgb(241, 229, 241);
+
+    display: block;
     position: relative; /* just here to activate z-index */
     z-index: 1; /* stacking order, makes sure li is on top of deleteBg*/
     padding-block: 5px;
@@ -18,7 +20,7 @@ li {
     -ms-user-select: none;     /* ^ old Edge/IE */
 }
 
-li.bought {
+.topLayer.bought {
     text-decoration: line-through;
     border-bottom: 1px solid rgb(216, 193, 216);
     color: gray;
@@ -43,6 +45,10 @@ li.bought {
 .columns-two {
     width: 95px;
     flex-shrink: 0;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .columns-two button {
@@ -52,11 +58,13 @@ li.bought {
 .container {
     background-color: rgb(241, 229, 241);
     min-height: calc(100vh - 70px); 
+
     width: min(95%, 500px);  /* responsive width */
     min-width: 320px;
 
     margin: 20px auto; 
     padding: 16px;
+
     border-radius: 10px;
 
 } /* fix container to be adaptable on web, do edit page*/

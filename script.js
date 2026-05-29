@@ -24,8 +24,8 @@ function addItem() {
     }
 
     // create wrapper
-    var wrapper = document.createElement("div");
-    wrapper.classList.add("swipeWrapper");
+    var li = document.createElement("li");
+    li.classList.add("swipeWrapper");
 
     // red background behind item
     var background = document.createElement("div");
@@ -33,24 +33,24 @@ function addItem() {
     background.textContent = "DELETE";
 
     // create item
-    var text = document.createTextNode(item);
-    var newItem = document.createElement("li");
-    newItem.appendChild(text);
+    var topLayer = document.createElement("div");
+    topLayer.classList.add("topLayer")
+    topLayer.textContent = item;
+
+    // build structure
+    li.appendChild(background);
+    li.appendChild(topLayer);
 
     // adding marking when items are bought
-    newItem.onclick = function () {
+    topLayer.onclick = function () {
         markAsBought(this);
     }
 
     // swipe feature 
-    addSwipeFeature(newItem);
-
-    // build structure
-    wrapper.appendChild(background);
-    wrapper.appendChild(newItem);
+    addSwipeFeature(topLayer);
 
     // add wrapper to ul
-    document.getElementById("firstList").appendChild(wrapper);
+    document.getElementById("firstList").appendChild(li);
 
     // clear input
     itemInput.value = "";
@@ -70,17 +70,17 @@ function markAsBought(element) {
     element.classList.toggle("bought");
 }
 
-function addSwipeFeature(item) {
+function addSwipeFeature(topLayer) {
     let startPos = 0;
     let isDragging = false;
 
-    item.addEventListener("pointerdown", (e) => {
+    topLayer.addEventListener("pointerdown", (e) => {
         isDragging = true;
         startPos = e.clientX;
-        item.setPointerCapture(e.pointerId);
+        topLayer.setPointerCapture(e.pointerId);
     });
 
-    item.addEventListener("pointermove", (e) => {
+    topLayer.addEventListener("pointermove", (e) => {
         if (!isDragging) return;
 
         let currentPos = e.clientX;
@@ -88,15 +88,15 @@ function addSwipeFeature(item) {
 
         if (distance < 0) {
             if (Math.abs(distance) > 10) {
-                item.moved = true;
+                topLayer.moved = true;
             }
 
-            item.style.transform = `translateX(${distance}px)`;
+            topLayer.style.transform = `translateX(${distance}px)`;
 
             let opacity = Math.min(Math.abs(distance) / 100, 1);
             let redStop = 80 - opacity * 50;
 
-            item.style.background = `linear-gradient(
+            topLayer.style.background = `linear-gradient(
                 to right,
                 rgb(241, 229, 241) 0%,
                 rgb(255, 192, 203) ${redStop}%,
@@ -105,7 +105,7 @@ function addSwipeFeature(item) {
         }
     })
 
-    item.addEventListener("pointerup", (e) => {
+    topLayer.addEventListener("pointerup", (e) => {
         if(!isDragging) return;
 
         isDragging = false;
@@ -113,10 +113,10 @@ function addSwipeFeature(item) {
         let distance = e.clientX - startPos;
 
         if (distance < -50) {
-            item.parentElement.remove(); // remove wrapper
+            topLayer.parentElement.remove(); // remove wrapper
         } else {
-            item.style.transform = "translateX(0px)";
-            item.style.background = null;
+            topLayer.style.transform = "translateX(0px)";
+            topLayer.style.background = null;
         }
 
     });
