@@ -70,6 +70,9 @@ function addSwipeFeature(item){
 
         if (distance < 0) {
             item.style.transform = `translateX(${distance}px)`;
+
+            let opacity = Math.min(Math.abs(distance) / 100, 1);
+            item.style.background = `linear-gradient(to left, rgba(255, 0, 0, ${opacity}) 0%, transparent 60%)`;
         } 
     })
 
@@ -84,6 +87,7 @@ function addSwipeFeature(item){
             item.remove()
         } else {
             item.style.transform = "translateX(0px)";
+            item.style.background = null;
         }
 
     })
