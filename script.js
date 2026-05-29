@@ -23,6 +23,16 @@ function addItem() {
         }
     }
 
+    // create wrapper
+    var wrapper = document.createElement("div");
+    wrapper.classList.add("swipeWrapper");
+
+    // red background behind item
+    var background = document.createElement("div");
+    background.classList.add("deleteBg");
+    background.textContent = "DELETE";
+
+    // create item
     var text = document.createTextNode(item);
     var newItem = document.createElement("li");
     newItem.appendChild(text);
@@ -32,10 +42,17 @@ function addItem() {
         markAsBought(this);
     }
 
+    // swipe feature 
     addSwipeFeature(newItem);
 
-    document.getElementById("firstList").appendChild(newItem);
+    // build structure
+    wrapper.appendChild(background);
+    wrapper.appendChild(newItem);
 
+    // add wrapper to ul
+    document.getElementById("firstList").appendChild(wrapper);
+
+    // clear input
     itemInput.value = "";
 }
 
@@ -46,6 +63,10 @@ document.getElementById("itemToAdd").addEventListener("keydown", function (event
 })
 
 function markAsBought(element) {
+    if (moved) {
+        moved = false;
+        return;
+    }
     element.classList.toggle("bought")
 }
 
@@ -53,6 +74,7 @@ function addSwipeFeature(item){
     let startPos = 0;
     let currentPos = 0;
     let isDragging = false;
+    let moved = false;
 
     item.addEventListener("pointerdown", (e) => {
         isDragging = true;
@@ -69,11 +91,23 @@ function addSwipeFeature(item){
         let distance = currentPos - startPos;
 
         if (distance < 0) {
+
+            if (Math.abs(distance) > 10) {
+                moved = true;
+            }
+
             item.style.transform = `translateX(${distance}px)`;
 
             let opacity = Math.min(Math.abs(distance) / 100, 1);
-            item.style.background = `linear-gradient(to left, rgba(255, 0, 0, ${opacity}) 0%, transparent 60%)`;
-        } 
+            let redStop = 80 - opacity * 50;
+
+            item.style.background = `linear-gradient(
+                to right,
+                rgb(241, 229, 241) 0%,
+                rgb(255, 192, 203) ${redStop}%,
+                rgba(241, 229, 241, 0) 100%
+            )`;
+        }
     })
 
     item.addEventListener("pointerup", (e) => {
@@ -81,7 +115,7 @@ function addSwipeFeature(item){
 
         isDragging = false;
 
-        let distance = currentPos - startPos;
+        let distance = e.clientX - startPos;
 
         if(distance < -100) {
             item.remove()
