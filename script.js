@@ -63,37 +63,32 @@ document.getElementById("itemToAdd").addEventListener("keydown", function (event
 })
 
 function markAsBought(element) {
-    if (moved) {
-        moved = false;
+    if (element.moved) {
+        element.moved = false;
         return;
     }
-    element.classList.toggle("bought")
+    element.classList.toggle("bought");
 }
 
-function addSwipeFeature(item){
+function addSwipeFeature(item) {
     let startPos = 0;
-    let currentPos = 0;
     let isDragging = false;
-    let moved = false;
 
     item.addEventListener("pointerdown", (e) => {
         isDragging = true;
         startPos = e.clientX;
-
         item.setPointerCapture(e.pointerId);
-    })
+    });
 
     item.addEventListener("pointermove", (e) => {
         if (!isDragging) return;
 
-        currentPos = e.clientX;
-        
+        let currentPos = e.clientX;
         let distance = currentPos - startPos;
 
         if (distance < 0) {
-
             if (Math.abs(distance) > 10) {
-                moved = true;
+                item.moved = true;
             }
 
             item.style.transform = `translateX(${distance}px)`;
@@ -117,14 +112,14 @@ function addSwipeFeature(item){
 
         let distance = e.clientX - startPos;
 
-        if(distance < -100) {
-            item.remove()
+        if (distance < -60) {
+            item.parentElement.remove(); // remove wrapper
         } else {
             item.style.transform = "translateX(0px)";
             item.style.background = null;
         }
 
-    })
+    });
 }
 
 function showInput() {

@@ -1,17 +1,21 @@
 
 ul {
     list-style-type: none;
-    padding-left: 1%;
-    margin-top: 3px;
+    padding-left: 1%; /* distance of ul from the left of border */
+    margin-top: 3px; /* distance of ul from input box */
 }
 
 li {
     cursor: pointer;
     border-bottom: 1px solid #e29d9d;
     background:  rgb(241, 229, 241);
-    position: relative;
-    z-index: 1;
+    position: relative; /* just here to activate z-index */
+    z-index: 1; /* stacking order, makes sure li is on top of deleteBg*/
     padding-block: 5px;
+
+    user-select: none; /* prevents blue selection from mouse*/
+    -webkit-user-select: none; /* same as above but Safari */
+    -ms-user-select: none;     /* ^ old Edge/IE */
 }
 
 li.bought {
@@ -27,10 +31,13 @@ li.bought {
 
 .rows {
     position: relative; /* makes rows the position reference for columns*/
+    gap: 20px;
+    align-items: flex-start;
 }
 
 .columns {
-    max-width: 390px;
+    flex: 1;              /* takes available space */
+    min-width: 250px;
 }               
 
 .columns-two { /* relies on .rows position */
@@ -40,18 +47,25 @@ li.bought {
 }
 
 .columns-two button {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    flex-shrink: 0; 
+
     font-size: medium;
-    margin-bottom: 10px;
 }
 
 .container {
     background-color: rgb(241, 229, 241);
-    min-height: 650px;
-    width: 500px;
-    margin: 0 auto;
-    padding-top: 10px;
-    padding-inline: 10px;
+    min-height: 70vh;        /* better than fixed px */
+    width: min(95%, 500px);  /* responsive width */
+       min-width: 420px;
+
+    margin: 20px auto; 
+    padding: 16px;
+    border-radius: 10px;
+
 } /* fix container to be adaptable on web, do edit page*/
 
 .swipeWrapper {
@@ -61,10 +75,15 @@ li.bought {
 .deleteBg {
     position: absolute;
     inset: 0;
+    z-index: 0;
     background: red;
-    padding-right: 10px;
-    padding-block: 5px;
-    text-align: right;
+
+    display: flex;
+    align-items: center;        /* vertical center */
+    justify-content: flex-end;  /* keep text on right */
+    padding-right: 5px;
+
     color: white;
     font-weight: bold;
+    border-bottom: 1px solid #e29d9d;
 }
