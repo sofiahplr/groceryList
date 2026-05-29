@@ -112,7 +112,7 @@ function addSwipeFeature(item) {
 
         let distance = e.clientX - startPos;
 
-        if (distance < -60) {
+        if (distance < -50) {
             item.parentElement.remove(); // remove wrapper
         } else {
             item.style.transform = "translateX(0px)";

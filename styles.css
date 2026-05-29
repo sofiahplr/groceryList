@@ -2,7 +2,7 @@
 ul {
     list-style-type: none;
     padding-left: 1%; /* distance of ul from the left of border */
-    margin-top: 3px; /* distance of ul from input box */
+    margin-top: 1px; /* distance of ul from input box */
 }
 
 li {
@@ -30,37 +30,30 @@ li.bought {
 }
 
 .rows {
-    position: relative; /* makes rows the position reference for columns*/
-    gap: 20px;
-    align-items: flex-start;
+    display: flex;
+    gap: 15px; /* The gap between the ul column and button column*/
+    align-items: flex-start; /* align columns at the top */
 }
 
 .columns {
-    flex: 1;              /* takes available space */
-    min-width: 250px;
-}               
+    flex: 1; /* column takes all available space */
+    min-width: 220px;
+}
 
-.columns-two { /* relies on .rows position */
-    position: absolute;
-    right: 3px;
-    top: 0;
+.columns-two {
+    width: 95px;
+    flex-shrink: 0;
 }
 
 .columns-two button {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    flex-shrink: 0; 
-
     font-size: medium;
 }
 
 .container {
     background-color: rgb(241, 229, 241);
-    min-height: 70vh;        /* better than fixed px */
+    min-height: calc(100vh - 70px); 
     width: min(95%, 500px);  /* responsive width */
-       min-width: 420px;
+    min-width: 320px;
 
     margin: 20px auto; 
     padding: 16px;
