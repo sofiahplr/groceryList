@@ -57,7 +57,7 @@ ul {
 
 .container {
     background-color: rgb(241, 229, 241);
-    min-height: calc(100vh - 70px); 
+    min-height: calc(100dvh - 70px); 
 
     width: min(95%, 500px);  /* responsive width */
     min-width: 320px;

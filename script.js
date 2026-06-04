@@ -14,15 +14,23 @@ function addItem() {
     }
 
     // checks for duplicates
-    var allItems = document.getElementById("firstList").getElementsByTagName("li");
-    var currentItem = item.toLowerCase();
-    for(let i = 0; i < allItems.length; i++) {
+    const allItems = document.querySelectorAll(".topLayer");
+    const currentItem = item.toLowerCase();
+    for (let i = 0; i < allItems.length; i++) {
         if (allItems[i].textContent.toLowerCase() === currentItem) {
             alert("This is already on the list");
             return;
         }
     }
 
+    createListItem(item);
+    saveList();
+
+    // clear input
+    itemInput.value = "";
+}
+
+function createListItem(text, bought = false) {
     // create wrapper
     var li = document.createElement("li");
     li.classList.add("swipeWrapper");
@@ -35,7 +43,11 @@ function addItem() {
     // create item
     var topLayer = document.createElement("div");
     topLayer.classList.add("topLayer")
-    topLayer.textContent = item;
+    topLayer.textContent = text;
+
+    if (bought) {
+        topLayer.classList.add("bought");
+    }
 
     // build structure
     li.appendChild(background);
@@ -44,6 +56,7 @@ function addItem() {
     // adding marking when items are bought
     topLayer.onclick = function () {
         markAsBought(this);
+        saveList();
     }
 
     // swipe feature 
@@ -51,10 +64,9 @@ function addItem() {
 
     // add wrapper to ul
     document.getElementById("firstList").appendChild(li);
-
-    // clear input
-    itemInput.value = "";
 }
+
+window.addEventListener("load", loadList);
 
 document.getElementById("itemToAdd").addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
@@ -114,11 +126,17 @@ function addSwipeFeature(topLayer) {
 
         if (distance < -50) {
             topLayer.parentElement.remove(); // remove wrapper
+            saveList();
         } else {
             topLayer.style.transform = "translateX(0px)";
             topLayer.style.background = null;
         }
 
+    });
+
+    topLayer.addEventListener("pointercancel", () => {
+        isDragging = false;
+        topLayer.style.transform = "translateX(0px)";
     });
 }
 
@@ -140,5 +158,36 @@ function clearList() {
     var yes = confirm("Are you sure you want to delete this list?");
     if (yes) {
         document.getElementById("firstList").innerHTML = "";
+        saveList();
     }
+}
+
+function saveList() {
+    const items = [];
+
+    document.querySelectorAll(".topLayer").forEach(item => {
+        items.push({
+            text: item.textContent,
+            bought: item.classList.contains("bought")
+        });
+    });
+
+    localStorage.setItem(
+        "groceryList",
+        JSON.stringify(items)
+    );
+}
+
+function loadList() {
+    const saved = localStorage.getItem("groceryList");
+
+    if (!saved) return;
+
+    document.getElementById("firstList").innerHTML = "";
+
+    const items = JSON.parse(saved);
+
+    items.forEach(item => {
+        createListItem(item.text, item.bought);
+    });
 }
