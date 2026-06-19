@@ -67,7 +67,7 @@ ul {
 
     border-radius: 10px;
 
-} /* fix container to be adaptable on web, do edit page*/
+}
 
 .swipeWrapper {
     position: relative;
@@ -87,4 +87,20 @@ ul {
     color: white;
     font-weight: bold;
     border-bottom: 1px solid #e29d9d;
+}
+
+#itemToAdd {
+    width: 100px;
+}
+
+input[type="number"] {
+    text-align: center;
+    border-radius: 5px;
+    border: 1.5px solid gray;
+    padding: 2px;
+    width: 40px;
+}
+
+#memo {
+    width: 160px;
 }

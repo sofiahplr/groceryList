@@ -48,6 +48,7 @@ function createListItem(text, bought = false) {
     if (bought) {
         topLayer.classList.add("bought");
     }
+    
 
     // build structure
     li.appendChild(background);
@@ -97,6 +98,8 @@ function addSwipeFeature(topLayer) {
 
         let currentPos = e.clientX;
         let distance = currentPos - startPos;
+        //limit swipe to the left
+        distance = Math.max(distance, -70);
 
         if (distance < 0) {
             if (Math.abs(distance) > 10) {
@@ -141,16 +144,23 @@ function addSwipeFeature(topLayer) {
 }
 
 function showInput() {
-    var input = document.getElementById("itemToAdd");
+    var inputs = document.querySelectorAll(".groceryInput");
     var button = document.getElementById("showInputBtn");
 
-    if (input.classList.contains("hidden")) {
-        input.classList.remove("hidden");
-        button.textContent = "Done";
-        input.focus(); // makes the cursor jump into it
-    } else {
-        input.classList.add("hidden");
-        button.textContent = "Add Food";
+    var isHidden = inputs[0].classList.contains("hidden");
+
+    inputs.forEach(input => {
+        if (isHidden) {
+            input.classList.remove("hidden");
+        } else {
+            input.classList.add("hidden");
+        }
+    });
+
+    button.textContent = isHidden ? "Done" : "Add Food";
+
+    if (isHidden) {
+        inputs[0].focus();
     }
 }
 

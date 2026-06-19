@@ -9,3 +9,8 @@ A grocery list program with helpful functionality that solves a real life proble
 
 # How to run
 through live preview
+
+plans
+- quantity
+- memo
+- edit page
