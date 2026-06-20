@@ -10,7 +10,11 @@ ul {
     border-bottom: 1px solid #e29d9d;
     background:  rgb(241, 229, 241);
 
-    display: block;
+    /* flex stuff is for  alignment of memo */
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
     position: relative; /* just here to activate z-index */
     z-index: 1; /* stacking order, makes sure li is on top of deleteBg*/
     padding-block: 5px;
@@ -105,4 +109,9 @@ input[type="number"] {
     font-weight: lighter;
     color: #5e5e5e;
     margin-left: 10px;
+}
+
+.item-memo {
+    margin-left: 10px;
+    color: #5e5e5e;
 }

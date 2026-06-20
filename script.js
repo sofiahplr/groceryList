@@ -22,7 +22,7 @@ function addItem() {
     const allItems = document.querySelectorAll(".item-name");
     const currentItemName = itemName.toLowerCase();
     for (let i = 0; i < allItems.length; i++) {
-        if (allItems[i].textContent.toLowerCase() === currentItemName) {
+        if (allItems[i].textContent.trim().toLowerCase() === currentItemName) {
             alert("This is already on the list");
             return;
         }
@@ -49,7 +49,11 @@ function createListItem(itemName, qty, memo, bought = false) {
 
     // create item
     var topLayer = document.createElement("div");
-    topLayer.classList.add("topLayer")
+    topLayer.classList.add("topLayer");
+
+    topLayer.dataset.itemName = itemName;
+    topLayer.dataset.qty = qty;
+    topLayer.dataset.memo = memo;
 
     // display
     topLayer.textContent = "";
@@ -64,7 +68,7 @@ function createListItem(itemName, qty, memo, bought = false) {
 
     let memoSpan = document.createElement("span");
     memoSpan.classList.add("item-memo");
-    memoSpan.textContent = memo ? ` ${memo}` : "";
+    memoSpan.textContent = memo ? memo : "";
 
     topLayer.appendChild(nameSpan);
     topLayer.appendChild(qtySpan);
@@ -207,9 +211,9 @@ function saveList() {
 
     document.querySelectorAll(".topLayer").forEach(topLayer => {
         items.push({
-            itemName: topLayer.querySelector(".item-name").textContent,
-            qty: topLayer.querySelector(".item-qty").textContent.replace(" x","").trim(),
-            memo: topLayer.querySelector(".item-memo").textContent.trim(),
+            itemName: topLayer.dataset.itemName,
+            qty: topLayer.dataset.qty,
+            memo: topLayer.dataset.memo,
             bought: topLayer.classList.contains("bought")
         });
     });
