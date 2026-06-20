@@ -101,6 +101,8 @@ input[type="number"] {
     width: 40px;
 }
 
-#memo {
-    width: 160px;
+.item-qty {
+    font-weight: lighter;
+    color: #5e5e5e;
+    margin-left: 10px;
 }

@@ -14,3 +14,8 @@ plans
 - quantity
 - memo
 - edit page
+
+bugs
+- duplicate checking is wrong now cuz of all the additions
+- savelist
+- loadlist

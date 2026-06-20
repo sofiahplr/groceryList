@@ -5,45 +5,70 @@
 // now add that list element and append to the unorderedlist
 function addItem() {
     var itemInput = document.getElementById("itemToAdd");
-    var item = itemInput.value.trim();
+    var qtyInput = document.getElementById("itemQty");
+    var memoInput = document.getElementById("itemMemo");
+
+    var itemName = itemInput.value.trim();
+    var qty = qtyInput.value;
+    var memo = memoInput.value.trim();
 
     // check if its empty
-    if (!item) {
+    if (!itemName) {
         alert("Please enter an item");
         return;
     }
 
     // checks for duplicates
-    const allItems = document.querySelectorAll(".topLayer");
-    const currentItem = item.toLowerCase();
+    const allItems = document.querySelectorAll(".item-name");
+    const currentItemName = itemName.toLowerCase();
     for (let i = 0; i < allItems.length; i++) {
-        if (allItems[i].textContent.toLowerCase() === currentItem) {
+        if (allItems[i].textContent.toLowerCase() === currentItemName) {
             alert("This is already on the list");
             return;
         }
     }
 
-    createListItem(item);
+    createListItem(itemName, qty, memo);
     saveList();
 
     // clear input
     itemInput.value = "";
+    qtyInput.value = "";
+    memoInput.value = "";
 }
 
-function createListItem(text, bought = false) {
+function createListItem(itemName, qty, memo, bought = false) {
     // create wrapper
-    var li = document.createElement("li");
-    li.classList.add("swipeWrapper");
+    var listItem = document.createElement("li");
+    listItem.classList.add("swipeWrapper");
 
     // red background behind item
-    var background = document.createElement("div");
-    background.classList.add("deleteBg");
-    background.textContent = "DELETE";
+    var deleteBackground = document.createElement("div");
+    deleteBackground.classList.add("deleteBg");
+    deleteBackground.textContent = "DELETE";
 
     // create item
     var topLayer = document.createElement("div");
     topLayer.classList.add("topLayer")
-    topLayer.textContent = text;
+
+    // display
+    topLayer.textContent = "";
+
+    let nameSpan = document.createElement("span");
+    nameSpan.classList.add("item-name");
+    nameSpan.textContent = itemName;
+
+    let qtySpan = document.createElement("span");
+    qtySpan.classList.add("item-qty");
+    qtySpan.textContent = qty ? ` x${qty}` : "";
+
+    let memoSpan = document.createElement("span");
+    memoSpan.classList.add("item-memo");
+    memoSpan.textContent = memo ? ` ${memo}` : "";
+
+    topLayer.appendChild(nameSpan);
+    topLayer.appendChild(qtySpan);
+    topLayer.appendChild(memoSpan);
 
     if (bought) {
         topLayer.classList.add("bought");
@@ -51,8 +76,8 @@ function createListItem(text, bought = false) {
     
 
     // build structure
-    li.appendChild(background);
-    li.appendChild(topLayer);
+    listItem.appendChild(deleteBackground);
+    listItem.appendChild(topLayer);
 
     // adding marking when items are bought
     topLayer.onclick = function () {
@@ -64,7 +89,7 @@ function createListItem(text, bought = false) {
     addSwipeFeature(topLayer);
 
     // add wrapper to ul
-    document.getElementById("firstList").appendChild(li);
+    document.getElementById("firstList").appendChild(listItem);
 }
 
 window.addEventListener("load", loadList);
@@ -74,13 +99,18 @@ document.getElementById("itemToAdd").addEventListener("keydown", function (event
         addItem();
     }
 })
+document.getElementById("itemMemo").addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+        addItem();
+    }
+})
 
-function markAsBought(element) {
-    if (element.moved) {
-        element.moved = false;
+function markAsBought(topLayer) {
+    if (topLayer.moved) {
+        topLayer.moved = false;
         return;
     }
-    element.classList.toggle("bought");
+    topLayer.classList.toggle("bought");
 }
 
 function addSwipeFeature(topLayer) {
@@ -175,10 +205,12 @@ function clearList() {
 function saveList() {
     const items = [];
 
-    document.querySelectorAll(".topLayer").forEach(item => {
+    document.querySelectorAll(".topLayer").forEach(topLayer => {
         items.push({
-            text: item.textContent,
-            bought: item.classList.contains("bought")
+            itemName: topLayer.querySelector(".item-name").textContent,
+            qty: topLayer.querySelector(".item-qty").textContent.replace(" x","").trim(),
+            memo: topLayer.querySelector(".item-memo").textContent.trim(),
+            bought: topLayer.classList.contains("bought")
         });
     });
 
@@ -189,15 +221,19 @@ function saveList() {
 }
 
 function loadList() {
-    const saved = localStorage.getItem("groceryList");
+    const savedList = localStorage.getItem("groceryList");
 
-    if (!saved) return;
+    if (!savedList) return;
 
     document.getElementById("firstList").innerHTML = "";
 
-    const items = JSON.parse(saved);
+    const items = JSON.parse(savedList);
 
-    items.forEach(item => {
-        createListItem(item.text, item.bought);
+    items.forEach(savedItem => {
+        createListItem(
+            savedItem.itemName, 
+            savedItem.qty,
+            savedItem.memo,
+            savedItem.bought);
     });
 }
