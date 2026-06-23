@@ -22,6 +22,11 @@ ul {
     user-select: none; /* prevents blue selection from mouse*/
     -webkit-user-select: none; /* same as above but Safari */
     -ms-user-select: none;     /* ^ old Edge/IE */
+
+    -webkit-mask-image: linear-gradient(to right, black 100%, black 100%);
+    mask-image: linear-gradient(to right, black 100%, black 100%);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
 }
 
 .topLayer.bought {
@@ -81,7 +86,7 @@ ul {
     position: absolute;
     inset: 0;
     z-index: 0;
-    background: red;
+    background: rgb(219, 39, 39);
 
     display: flex;
     align-items: center;        /* vertical center */

@@ -103,6 +103,13 @@ document.getElementById("itemToAdd").addEventListener("keydown", function (event
         addItem();
     }
 })
+
+document.getElementById("itemQty").addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+        addItem();
+    }
+})
+
 document.getElementById("itemMemo").addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
         addItem();
@@ -142,15 +149,23 @@ function addSwipeFeature(topLayer) {
 
             topLayer.style.transform = `translateX(${distance}px)`;
 
-            let opacity = Math.min(Math.abs(distance) / 100, 1);
-            let redStop = 80 - opacity * 50;
+            let abs = Math.abs(distance);
 
-            topLayer.style.background = `linear-gradient(
-                to right,
-                rgb(241, 229, 241) 0%,
-                rgb(255, 192, 203) ${redStop}%,
-                rgba(241, 229, 241, 0) 100%
-            )`;
+            const fadeStart = 25;
+            const fadeRange = 50;
+
+            let progress = 0;
+
+            if (abs > fadeStart) {
+                progress = Math.min((abs - fadeStart) / fadeRange, 1);
+            }
+
+            progress = Math.pow(progress, 1.8);
+
+            let fadePoint = 100 - progress * 90;
+
+            topLayer.style.webkitMaskImage =
+            `linear-gradient(to right, black ${fadePoint}%, transparent 100%)`;
         }
     })
 
@@ -166,7 +181,7 @@ function addSwipeFeature(topLayer) {
             saveList();
         } else {
             topLayer.style.transform = "translateX(0px)";
-            topLayer.style.background = null;
+            topLayer.style.webkitMaskImage = "";
         }
 
     });
