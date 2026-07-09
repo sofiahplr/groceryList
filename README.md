@@ -11,11 +11,7 @@ A grocery list program with helpful functionality that solves a real life proble
 through live preview
 
 plans
-- quantity
-- memo
 - edit page
-
-bugs
-- duplicate checking is wrong now cuz of all the additions
-- savelist
-- loadlist
+- sort item .. recently added, alphabetical order, 
+- drag to reorder
+- undo

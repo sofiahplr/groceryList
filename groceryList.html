@@ -8,11 +8,11 @@
 </head>
 
 <body>
-    <div class="container">
+    <div id="mainScreen" class="container">
         <div> 
             <h1>My Grocery List</h1>
         </div>
-        
+            
         <main class="rows">
             <div class="columns"> 
                 <input id="itemToAdd" type="text" class="groceryInput hidden" placeholder="Enter item">
@@ -20,16 +20,40 @@
                 <input id="itemMemo" type="text" class="groceryInput hidden" placeholder="Notes">
                 <ul id="firstList"></ul>
             </div>
-                
+                    
             <div class="columns-two"> 
                 <button id= "showInputBtn" onclick="showInput()">Add Food</button> 
                 <button onclick="clearList()">Delete List</button> 
-                <button>Edit</button>
-            </div>
-                
+                <button onclick="openEditPage()">Edit</button>
+            </div>  
         </main>
+    </div>
+
+    <div id="editScreen" class="container">
+        <h1>Edit Items</h1>
+
+        <button onclick="goToMainScreen()">Back</button>
+
+        <ul id="editList"></ul>
+
+        <div id="editForm"> 
+            <label for="editName">Item Name</label>
+            <input id="editName" type="text" placeholder="Enter item" >
+
+            <label for="editQty">Item Name</label>
+            <input id="editQty" type="number" min="0" placeholder="Qty">
+
+            <labelfor="editMemo">Item Name</label>
+            <input id="editMemo" type="text" placeholder="Notes">
+
+            <button onclick="saveEditedItem()">Save Changes</button>
+        </div>
+
+
 
     </div>
+
+
 
     <script src="script.js"></script>
 

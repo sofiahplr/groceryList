@@ -3,6 +3,7 @@ ul {
     list-style-type: none;
     padding-left: 1%; /* distance of ul from the left of border */
     margin-top: 1px; /* distance of ul from input box */
+    
 }
 
 .topLayer {
@@ -10,14 +11,13 @@ ul {
     border-bottom: 1px solid #e29d9d;
     background:  rgb(241, 229, 241);
 
-    /* flex stuff is for  alignment of memo */
     display: flex;
     align-items: center;
     flex-wrap: wrap;
 
     position: relative; /* just here to activate z-index */
     z-index: 1; /* stacking order, makes sure li is on top of deleteBg*/
-    padding-block: 5px;
+    padding-block: 10px;
 
     user-select: none; /* prevents blue selection from mouse*/
     -webkit-user-select: none; /* same as above but Safari */
@@ -119,4 +119,34 @@ input[type="number"] {
 .item-memo {
     margin-left: 10px;
     color: #5e5e5e;
+}
+
+#editScreen {
+    display:flex;
+    flex-direction: column;
+}
+
+#editList {
+    margin-top: 15px;
+}
+
+.editItem {
+    padding: 10px;
+    border-bottom: 1px solid #e29d9d;
+    cursor: pointer;
+    user-select: none;
+}
+
+.editItem:hover {
+    background: rgb(232, 216, 232);
+}
+
+#editForm {
+    display: flex;
+    flex-direction: column;
+    background:rgb(247, 217, 224);
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    margin-top: auto;
 }
