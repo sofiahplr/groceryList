@@ -1,8 +1,8 @@
 
 // to do: use const and let, lessen var 
 
-let selectedItem  = null;
-let selectedEditItem  = null;
+let editMode = false;
+let currentEditingItem = null;
 
 // Add item to List
 // get the element in input, turn it into a text, make a list item
@@ -91,8 +91,12 @@ function createListItem(name, qty, memo, bought = false) {
 
     // adding marking when items are bought
     topLayer.onclick = function () {
-        markAsBought(this);
-        saveList();
+        if (editMode) {
+            selectEditItem(this);
+        } else {
+            markAsBought(this);
+            saveList();
+        }
     }
 
     // swipe feature 
@@ -112,12 +116,6 @@ document.getElementById("itemToAdd").addEventListener("keydown", function (event
 })
 
 document.getElementById("itemQty").addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-        addItem();
-    }
-})
-
-document.getElementById("itemMemo").addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
         addItem();
     }
@@ -201,7 +199,7 @@ function addSwipeFeature(topLayer) {
 
 function showInput() {
     var inputs = document.querySelectorAll(".groceryInput");
-    var button = document.getElementById("showInputBtn");
+    var showInp = document.getElementById("showInputBtn");
 
     var isHidden = inputs[0].classList.contains("hidden");
 
@@ -213,7 +211,7 @@ function showInput() {
         }
     });
 
-    button.textContent = isHidden ? "Done" : "Add Food";
+    showInp.textContent = isHidden ? "Done" : "Add Food";
 
     if (isHidden) {
         inputs[0].focus();
@@ -264,47 +262,22 @@ function loadList() {
     });
 }
 
-function openEditPage() {
-    loadEditList();
-    document.getElementById("mainScreen").style.display = "none";
-    document.getElementById("editScreen").style.display = "flex";
-}
+function selectEditItem(groceryItem) {
+    if (currentEditingItem) {
+        currentEditingItem.classList.remove("editing-selected");
+    }
+    
+    currentEditingItem = groceryItem;
 
-function goToMainScreen() {
-    document.getElementById("editScreen").style.display = "none";
-    document.getElementById("mainScreen").style.display = "block";
-}
-
-function loadEditList() {
-    const editList = document.getElementById("editList");
-    editList.innerHTML = "";
-
-    const groceryItems = document.querySelectorAll(".topLayer");
-    groceryItems.forEach(function (groceryItem) {
-        const editItem = document.createElement("div");
-        editItem.classList.add("editItem");
-
-        editItem.textContent = groceryItem.dataset.name;
-
-        editItem.onclick = function () {
-            selectEditItem(groceryItem,editItem);
-        };
-
-        editList.appendChild(editItem);
-    });
-
-    function selectEditItem(groceryItem, editItem) {
-    selectedItem = groceryItem;
-    selectedEditItem = editItem;
+    currentEditingItem.classList.add("editing-selected");
 
     document.getElementById("editName").value = groceryItem.dataset.name;
     document.getElementById("editQty").value = groceryItem.dataset.qty;
     document.getElementById("editMemo").value = groceryItem.dataset.memo;
 }
-}
 
 function saveEditedItem() {
-    if (!selectedItem) {
+    if (!currentEditingItem) {
         alert("Please select an item first");
         return;
     }
@@ -318,20 +291,38 @@ function saveEditedItem() {
         return;
     }
 
-    selectedItem.dataset.name = newName;
-    selectedItem.dataset.qty = newQty;
-    selectedItem.dataset.memo = newMemo;
+    currentEditingItem.dataset.name = newName;
+    currentEditingItem.dataset.qty = newQty;
+    currentEditingItem.dataset.memo = newMemo;
 
-    selectedItem.querySelector(".item-name").textContent = newName;
-    selectedItem.querySelector(".item-qty").textContent = newQty ? ` x${newQty}` : "";
-    selectedItem.querySelector(".item-memo").textContent = newMemo;
+    currentEditingItem.querySelector(".item-name").textContent = newName;
+    currentEditingItem.querySelector(".item-qty").textContent = newQty ? ` x${newQty}` : "";
+    currentEditingItem.querySelector(".item-memo").textContent = newMemo;
 
-    selectedEditItem.textContent = newName;
-
-    
     saveList();
-    
-    alert("Changes Saved!");
 }
 
-//add a pop up once something is confirmed to be saved
+function toggleEditor() {
+    document.getElementById("editMode").classList.toggle("hidden");
+
+    let form = document.getElementById("editForm");
+    form.classList.toggle("hidden");
+
+    let btn = document.getElementById("editBtn");
+
+    let isHidden = form.classList.contains("hidden");
+    editMode = !isHidden;
+
+    btn.textContent = isHidden ? "Edit" : "Close Edit"
+
+    if (isHidden) {
+        currentEditingItem.classList.remove("editing-selected");
+        currentEditingItem = null;
+    } else {
+        const firstItem = document.querySelector(".topLayer");
+
+        if (firstItem) {
+            selectEditItem(firstItem);
+        }
+    }
+}

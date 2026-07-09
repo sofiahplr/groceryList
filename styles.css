@@ -121,32 +121,47 @@ input[type="number"] {
     color: #5e5e5e;
 }
 
-#editScreen {
-    display:flex;
-    flex-direction: column;
-}
-
-#editList {
-    margin-top: 15px;
-}
-
-.editItem {
-    padding: 10px;
-    border-bottom: 1px solid #e29d9d;
-    cursor: pointer;
-    user-select: none;
-}
-
-.editItem:hover {
-    background: rgb(232, 216, 232);
-}
-
 #editForm {
-    display: flex;
     flex-direction: column;
     background:rgb(247, 217, 224);
     width: 100%;
     box-sizing: border-box;
     padding: 12px;
     margin-top: auto;
+}
+
+#editForm.hidden {
+    display: none;
+}
+
+#editForm:not(.hidden) {
+    display: flex;
+}
+
+#editMode {
+    text-align: center;
+    background-color: rgb(135, 236, 135);
+}
+
+#editMode h2 {
+    margin-bottom: 0;;
+}
+
+#editMode p {
+    margin-top: 0;
+    color:rgb(230, 72, 72);
+}
+
+.topLayer.editing-selected::before {
+    content: "➜";
+    margin-right: 8px;
+    color: rgb(150, 80, 150);
+    font-weight: bold;
+}
+
+#addItemBtn {
+    border-radius: 10px;
+    width:fit-content;
+    text-align: center;
+    background-color: rgb(182, 240, 182)
 }
