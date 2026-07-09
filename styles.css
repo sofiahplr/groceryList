@@ -128,6 +128,7 @@ input[type="number"] {
     box-sizing: border-box;
     padding: 12px;
     margin-top: auto;
+    border: 2px dotted rgb(255, 255, 255);
 }
 
 #editForm.hidden {
@@ -140,11 +141,19 @@ input[type="number"] {
 
 #editMode {
     text-align: center;
-    background-color: rgb(135, 236, 135);
+    background-color: rgba(250, 255, 180, 0.959);
+    border-radius: 10px ;
+    border: ridge rgb(255, 191, 210);
+    margin-bottom: 10px;
+}
+
+#editMode h2,
+#editMode p {
+    margin: 10px;
 }
 
 #editMode h2 {
-    margin-bottom: 0;;
+    margin-bottom: 0;
 }
 
 #editMode p {
@@ -164,4 +173,22 @@ input[type="number"] {
     width:fit-content;
     text-align: center;
     background-color: rgb(182, 240, 182)
+}
+
+.groceryInput {
+    display: flex;
+    align-items: flex-end; 
+    gap: 7px;
+}
+
+.groceryInput.hidden {
+    display:none;
+}
+
+#itemToAdd,
+#itemQty,
+#itemMemo {
+    height: 25px;
+    min-height: 25px;
+    
 }

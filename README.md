@@ -15,3 +15,6 @@ plans
 - sort item .. recently added, alphabetical order, 
 - drag to reorder
 - undo
+
+- confirm to add duplicate instead of not letting it
+- hover in edit

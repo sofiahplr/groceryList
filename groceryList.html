@@ -21,10 +21,12 @@
             
         <main class="rows">
             <div class="columns"> 
-                <input id="itemToAdd" type="text" class="groceryInput hidden" placeholder="Enter item">
-                <input id="itemQty" type="number" min="0" class="groceryInput hidden" placeholder="Qty">
-                <textarea id="itemMemo" class="groceryInput hidden" placeholder="Notes"></textarea>
-                <button id="addItemBtn" class="groceryInput hidden">➕</button>
+                <div class="groceryInput hidden">
+                    <input id="itemToAdd" type="text" placeholder="Enter item">
+                    <input id="itemQty" type="number" min="0" placeholder="Qty">
+                    <textarea id="itemMemo" placeholder="Notes"></textarea>
+                    <button id="addItemBtn" onclick="addItem()">➕</button>
+                </div>
                 <ul id="firstList"></ul>
             </div>
                     
