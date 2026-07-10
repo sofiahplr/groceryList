@@ -326,3 +326,8 @@ function toggleEditor() {
         }
     }
 }
+
+function clearInput() {
+    document.querySelectorAll(".groceryInput input, .groceryInput textarea")
+        .forEach(input => input.value = "");
+}
