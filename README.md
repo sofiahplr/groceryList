@@ -18,3 +18,4 @@ plans
 
 - confirm to add duplicate instead of not letting it
 - hover in edit
+- add a clear input button?

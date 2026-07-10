@@ -173,6 +173,11 @@ input[type="number"] {
     width:fit-content;
     text-align: center;
     background-color: rgb(182, 240, 182)
+    
+}
+
+#addItemBtn:hover {
+    background-color: rgb(159, 221, 159)
 }
 
 .groceryInput {
@@ -191,4 +196,8 @@ input[type="number"] {
     height: 25px;
     min-height: 25px;
     
+}
+
+#mainScreen:has(#editForm:not(.hidden)) .topLayer:hover {
+    background-color: rgb(221, 200, 221);
 }
