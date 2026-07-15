@@ -1,5 +1,5 @@
 
-// to do: use const and let, lessen var 
+// to do: use const and let, lessen let 
 
 let editMode = false;
 let currentEditingItem = null;
@@ -9,13 +9,13 @@ let currentEditingItem = null;
 // make list item and append text into li (ex. <li>itemText</li>)
 // now add that list element and append to the unorderedlist
 function addItem() {
-    var nameInput = document.getElementById("itemToAdd");
-    var qtyInput = document.getElementById("itemQty");
-    var memoInput = document.getElementById("itemMemo");
+    let nameInput = document.getElementById("itemToAdd");
+    let qtyInput = document.getElementById("itemQty");
+    let memoInput = document.getElementById("itemMemo");
 
-    var name = nameInput.value.trim();
-    var qty = qtyInput.value;
-    var memo = memoInput.value.trim();
+    let name = nameInput.value.trim();
+    let qty = qtyInput.value;
+    let memo = memoInput.value.trim();
 
     // check if its empty
     if (!name) {
@@ -45,59 +45,55 @@ function addItem() {
 // split into diff funcs
 function createListItem(name, qty, memo, bought = false) {
     // create wrapper
-    var listItem = document.createElement("li");
+    let listItem = document.createElement("li");
     listItem.classList.add("swipeWrapper");
 
     // red background behind item
-    var deleteBackground = document.createElement("div");
+    let deleteBackground = document.createElement("div");
     deleteBackground.classList.add("deleteBg");
     deleteBackground.textContent = "DELETE";
 
     // create item
-    var topLayer = document.createElement("div");
+    let topLayer = document.createElement("div");
     topLayer.classList.add("topLayer");
 
     topLayer.dataset.name = name;
     topLayer.dataset.qty = qty;
     topLayer.dataset.memo = memo;
 
-    // display
-    topLayer.textContent = "";
-
     let nameSpan = document.createElement("span");
     nameSpan.classList.add("item-name");
-    nameSpan.textContent = name;
 
     let qtySpan = document.createElement("span");
     qtySpan.classList.add("item-qty");
-    qtySpan.textContent = qty ? ` x${qty}` : "";
 
     let memoSpan = document.createElement("span");
     memoSpan.classList.add("item-memo");
-    memoSpan.textContent = memo ? memo : "";
 
     topLayer.appendChild(nameSpan);
     topLayer.appendChild(qtySpan);
     topLayer.appendChild(memoSpan);
 
+    updateItemDisplay(topLayer);
+
+    // To keep state for loadList
     if (bought) {
         topLayer.classList.add("bought");
     }
     
-
     // build structure
     listItem.appendChild(deleteBackground);
     listItem.appendChild(topLayer);
 
-    // adding marking when items are bought
-    topLayer.onclick = function () {
+    // adding marking when items are bought and selecting item in edit mode
+    topLayer.addEventListener("click", function() {
         if (editMode) {
-            selectEditItem(this);
-        } else {
-            markAsBought(this);
-            saveList();
-        }
-    }
+                selectEditItem(this);
+            } else {
+                markAsBought(this);
+                saveList();
+            }
+    });
 
     // swipe feature 
     addSwipeFeature(topLayer);
@@ -106,20 +102,26 @@ function createListItem(name, qty, memo, bought = false) {
     document.getElementById("firstList").appendChild(listItem);
 }
 
+function updateItemDisplay(topLayer) {
+    topLayer.querySelector(".item-name").textContent = 
+        topLayer.dataset.name;
+    
+    topLayer.querySelector(".item-qty").textContent =
+        topLayer.dataset.qty ? ` x${topLayer.dataset.qty}` : "";
+
+    topLayer.querySelector(".item-memo").textContent =
+        topLayer.dataset.memo;
+}
+
 window.addEventListener("load", loadList);
 
-/* To do: combine these three listeners so not repetitive */
-document.getElementById("itemToAdd").addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-        addItem();
-    }
-})
-
-document.getElementById("itemQty").addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-        addItem();
-    }
-})
+document.querySelectorAll("#itemToAdd, #itemQty").forEach(input => {
+    input.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            addItem();
+        }
+    });
+});
 
 function markAsBought(topLayer) {
     if (topLayer.moved) {
@@ -198,10 +200,10 @@ function addSwipeFeature(topLayer) {
 }
 
 function showInput() {
-    var inputs = document.querySelectorAll(".groceryInput");
-    var showInp = document.getElementById("showInputBtn");
+    let inputs = document.querySelectorAll(".groceryInput");
+    let showInp = document.getElementById("showInputBtn");
 
-    var isHidden = inputs[0].classList.contains("hidden");
+    let isHidden = inputs[0].classList.contains("hidden");
 
     inputs.forEach(input => {
         if (isHidden) {
@@ -219,10 +221,13 @@ function showInput() {
 }
 
 function clearList() {
-    var yes = confirm("Are you sure you want to delete this list?");
+    let yes = confirm("Are you sure you want to delete this list?");
     if (yes) {
         document.getElementById("firstList").innerHTML = "";
         saveList();
+        document.getElementById("editName").value = "";
+        document.getElementById("editQty").value = "";
+        document.getElementById("editMemo").value = "";
     }
 }
 
@@ -295,9 +300,7 @@ function saveEditedItem() {
     currentEditingItem.dataset.qty = newQty;
     currentEditingItem.dataset.memo = newMemo;
 
-    currentEditingItem.querySelector(".item-name").textContent = newName;
-    currentEditingItem.querySelector(".item-qty").textContent = newQty ? ` x${newQty}` : "";
-    currentEditingItem.querySelector(".item-memo").textContent = newMemo;
+    updateItemDisplay(currentEditingItem);
 
     saveList();
 }
@@ -316,7 +319,10 @@ function toggleEditor() {
     btn.textContent = isHidden ? "Edit" : "Close Edit"
 
     if (isHidden) {
-        currentEditingItem.classList.remove("editing-selected");
+        if (currentEditingItem) {
+            currentEditingItem.classList.remove("editing-selected");
+        }
+
         currentEditingItem = null;
     } else {
         const firstItem = document.querySelector(".topLayer");
