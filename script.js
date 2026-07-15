@@ -9,13 +9,13 @@ let currentEditingItem = null;
 // make list item and append text into li (ex. <li>itemText</li>)
 // now add that list element and append to the unorderedlist
 function addItem() {
-    let nameInput = document.getElementById("itemToAdd");
-    let qtyInput = document.getElementById("itemQty");
-    let memoInput = document.getElementById("itemMemo");
+    const nameInput = document.getElementById("itemToAdd");
+    const qtyInput = document.getElementById("itemQty");
+    const memoInput = document.getElementById("itemMemo");
 
-    let name = nameInput.value.trim();
-    let qty = qtyInput.value;
-    let memo = memoInput.value.trim();
+    const name = nameInput.value.trim();
+    const qty = qtyInput.value;
+    const memo = memoInput.value.trim();
 
     // check if its empty
     if (!name) {
@@ -45,29 +45,29 @@ function addItem() {
 // split into diff funcs
 function createListItem(name, qty, memo, bought = false) {
     // create wrapper
-    let listItem = document.createElement("li");
+    const listItem = document.createElement("li");
     listItem.classList.add("swipeWrapper");
 
     // red background behind item
-    let deleteBackground = document.createElement("div");
+    const deleteBackground = document.createElement("div");
     deleteBackground.classList.add("deleteBg");
     deleteBackground.textContent = "DELETE";
 
     // create item
-    let topLayer = document.createElement("div");
+    const topLayer = document.createElement("div");
     topLayer.classList.add("topLayer");
 
     topLayer.dataset.name = name;
     topLayer.dataset.qty = qty;
     topLayer.dataset.memo = memo;
 
-    let nameSpan = document.createElement("span");
+    const nameSpan = document.createElement("span");
     nameSpan.classList.add("item-name");
 
-    let qtySpan = document.createElement("span");
+    const qtySpan = document.createElement("span");
     qtySpan.classList.add("item-qty");
 
-    let memoSpan = document.createElement("span");
+    const memoSpan = document.createElement("span");
     memoSpan.classList.add("item-memo");
 
     topLayer.appendChild(nameSpan);
@@ -144,19 +144,19 @@ function addSwipeFeature(topLayer) {
     topLayer.addEventListener("pointermove", (e) => {
         if (!isDragging) return;
 
-        let currentPos = e.clientX;
+        const currentPos = e.clientX;
         let distance = currentPos - startPos;
         //limit swipe to the left
         distance = Math.max(distance, -70);
 
         if (distance < 0) {
-            if (Math.abs(distance) > 10) {
+            const abs = Math.abs(distance);
+
+            if (abs > 1) {
                 topLayer.moved = true;
             }
 
             topLayer.style.transform = `translateX(${distance}px)`;
-
-            let abs = Math.abs(distance);
 
             const fadeStart = 25;
             const fadeRange = 50;
@@ -169,7 +169,7 @@ function addSwipeFeature(topLayer) {
 
             progress = Math.pow(progress, 1.8);
 
-            let fadePoint = 100 - progress * 90;
+            const fadePoint = 100 - progress * 90;
 
             topLayer.style.webkitMaskImage =
             `linear-gradient(to right, black ${fadePoint}%, transparent 100%)`;
@@ -181,7 +181,7 @@ function addSwipeFeature(topLayer) {
 
         isDragging = false;
 
-        let distance = e.clientX - startPos;
+        const distance = e.clientX - startPos;
 
         if (distance < -50) {
             topLayer.parentElement.remove(); // remove wrapper
@@ -200,28 +200,22 @@ function addSwipeFeature(topLayer) {
 }
 
 function showInput() {
-    let inputs = document.querySelectorAll(".groceryInput");
-    let showInp = document.getElementById("showInputBtn");
+    const inputs = document.querySelector(".groceryInput");
+    const showInp = document.getElementById("showInputBtn");
 
-    let isHidden = inputs[0].classList.contains("hidden");
+    const isHidden = inputs.classList.contains("hidden");
 
-    inputs.forEach(input => {
-        if (isHidden) {
-            input.classList.remove("hidden");
-        } else {
-            input.classList.add("hidden");
-        }
-    });
+    inputs.classList.toggle("hidden")
 
     showInp.textContent = isHidden ? "Done" : "Add Food";
 
-    if (isHidden) {
-        inputs[0].focus();
+    if(isHidden) {
+        document.getElementById("itemToAdd").focus();
     }
 }
 
 function clearList() {
-    let yes = confirm("Are you sure you want to delete this list?");
+    const yes = confirm("Are you sure you want to delete this list?");
     if (yes) {
         document.getElementById("firstList").innerHTML = "";
         saveList();
@@ -308,12 +302,12 @@ function saveEditedItem() {
 function toggleEditor() {
     document.getElementById("editMode").classList.toggle("hidden");
 
-    let form = document.getElementById("editForm");
+    const form = document.getElementById("editForm");
     form.classList.toggle("hidden");
 
-    let btn = document.getElementById("editBtn");
+    const btn = document.getElementById("editBtn");
 
-    let isHidden = form.classList.contains("hidden");
+    const isHidden = form.classList.contains("hidden");
     editMode = !isHidden;
 
     btn.textContent = isHidden ? "Edit" : "Close Edit"
