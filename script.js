@@ -270,9 +270,9 @@ function selectEditItem(groceryItem) {
 
     currentEditingItem.classList.add("editing-selected");
 
-    document.getElementById("editName").value = groceryItem.dataset.name;
-    document.getElementById("editQty").value = groceryItem.dataset.qty;
-    document.getElementById("editMemo").value = groceryItem.dataset.memo;
+    document.getElementById("editName").value = currentEditingItem.dataset.name;
+    document.getElementById("editQty").value = currentEditingItem.dataset.qty;
+    document.getElementById("editMemo").value = currentEditingItem.dataset.memo;
 }
 
 function saveEditedItem() {
