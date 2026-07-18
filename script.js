@@ -1,13 +1,6 @@
-
-// to do: use const and let, lessen let 
-
 let editMode = false;
 let currentEditingItem = null;
 
-// Add item to List
-// get the element in input, turn it into a text, make a list item
-// make list item and append text into li (ex. <li>itemText</li>)
-// now add that list element and append to the unorderedlist
 function addItem() {
     const nameInput = document.getElementById("itemToAdd");
     const qtyInput = document.getElementById("itemQty");
@@ -21,16 +14,9 @@ function addItem() {
     if (!name) {
         alert("Please enter an item");
         return;
-    }
-
-    // checks for duplicates
-    const allItemNames = document.querySelectorAll(".item-name");
-    const currentItemName = name.toLowerCase();
-    for (let i = 0; i < allItemNames.length; i++) {
-        if (allItemNames[i].textContent.trim().toLowerCase() === currentItemName) {
-            alert("This is already on the list");
-            return;
-        }
+    } else if (isDuplicate(name)) {
+        alert("This is already on the list");
+        return;
     }
 
     createListItem(name, qty, memo);
@@ -40,6 +26,26 @@ function addItem() {
     nameInput.value = "";
     qtyInput.value = "";
     memoInput.value = "";
+}
+
+function isDuplicate(name, itemToIgnore = null) {
+    const allItems = document.querySelectorAll(".topLayer");
+    const currentItemName = name.trim().toLowerCase();
+
+    for (let i = 0; i < allItems.length; i++) {
+        if (allItems[i] === itemToIgnore) {
+            continue;
+        }
+
+        const existingName =
+            allItems[i].dataset.name.trim().toLowerCase();
+
+        if (existingName === currentItemName) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 // split into diff funcs
@@ -152,7 +158,7 @@ function addSwipeFeature(topLayer) {
         if (distance < 0) {
             const abs = Math.abs(distance);
 
-            if (abs > 1) {
+            if (abs > 10) {
                 topLayer.moved = true;
             }
 
@@ -184,6 +190,9 @@ function addSwipeFeature(topLayer) {
         const distance = e.clientX - startPos;
 
         if (distance < -50) {
+            if(topLayer === currentEditingItem) {
+                currentEditingItem = null;
+            }
             topLayer.parentElement.remove(); // remove wrapper
             saveList();
         } else {
@@ -195,7 +204,9 @@ function addSwipeFeature(topLayer) {
 
     topLayer.addEventListener("pointercancel", () => {
         isDragging = false;
+        topLayer.moved = false;
         topLayer.style.transform = "translateX(0px)";
+        topLayer.style.webkitMaskImage = "";
     });
 }
 
@@ -218,10 +229,14 @@ function clearList() {
     const yes = confirm("Are you sure you want to delete this list?");
     if (yes) {
         document.getElementById("firstList").innerHTML = "";
-        saveList();
+        
         document.getElementById("editName").value = "";
         document.getElementById("editQty").value = "";
         document.getElementById("editMemo").value = "";
+
+        currentEditingItem = null;
+
+        saveList();
     }
 }
 
@@ -287,6 +302,9 @@ function saveEditedItem() {
 
     if (!newName) {
         alert("Item name cannot be empty");
+        return;
+    } else if (isDuplicate(newName, currentEditingItem)) {
+        alert("This is already on the list");
         return;
     }
 
