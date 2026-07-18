@@ -305,11 +305,10 @@ function toggleEditor() {
     const form = document.getElementById("editForm");
     form.classList.toggle("hidden");
 
-    const btn = document.getElementById("editBtn");
-
     const isHidden = form.classList.contains("hidden");
     editMode = !isHidden;
 
+    const btn = document.getElementById("editBtn");
     btn.textContent = isHidden ? "Edit" : "Close Edit"
 
     if (isHidden) {
