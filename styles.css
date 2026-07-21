@@ -36,10 +36,6 @@ ul {
     background: rgb(232, 216, 232);
 }
 
-.hidden {
-    display: none;
-}
-
 .rows {
     display: flex;
     gap: 15px; /* The gap between the ul column and button column*/
@@ -58,6 +54,10 @@ ul {
     display: flex;
     flex-direction: column;
     gap: 5px;
+}
+
+.hidden {
+    display: none;
 }
 
 .columns-two button {

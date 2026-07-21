@@ -210,17 +210,21 @@ function addSwipeFeature(topLayer) {
     });
 }
 
-function showInput() {
+function showInput(shouldShow) {
     const inputs = document.querySelector(".groceryInput");
     const showInp = document.getElementById("showInputBtn");
 
-    const isHidden = inputs.classList.contains("hidden");
+    if(shouldShow === undefined) {
+        inputs.classList.toggle("hidden");
+    } else {
+        inputs.classList.toggle("hidden", !shouldShow)
+    }
 
-    inputs.classList.toggle("hidden")
+    const inputsAreHidden = inputs.classList.contains("hidden");
 
-    showInp.textContent = isHidden ? "Done" : "Add Food";
+    showInp.textContent = inputsAreHidden ? "Add Food" : "Done";
 
-    if(isHidden) {
+    if(!inputsAreHidden) {
         document.getElementById("itemToAdd").focus();
     }
 }
@@ -326,21 +330,27 @@ function toggleEditor() {
     const isHidden = form.classList.contains("hidden");
     editMode = !isHidden;
 
-    const btn = document.getElementById("editBtn");
-    btn.textContent = isHidden ? "Edit" : "Close Edit"
+    const sideBtn = document.querySelector(".columns-two");
 
     if (isHidden) {
+        sideBtn.classList.remove("hidden");
+
         if (currentEditingItem) {
             currentEditingItem.classList.remove("editing-selected");
         }
 
         currentEditingItem = null;
     } else {
+
+        showInput(false);
+        sideBtn.classList.add("hidden");
+
         const firstItem = document.querySelector(".topLayer");
 
         if (firstItem) {
             selectEditItem(firstItem);
         }
+
     }
 }
 

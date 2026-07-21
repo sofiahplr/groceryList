@@ -15,4 +15,4 @@ plans
 - drag to reorder
 - undo
 
-- confirm to add duplicate instead of not letting it
+- dont let add when editor open

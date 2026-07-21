@@ -13,8 +13,11 @@
             <h1>My Grocery List</h1>
 
             <div id="editMode" class="hidden">
-                <h2>Edit Mode</h2>
-                <p>(Turn Edit Mode off to mark items as bought)</p>
+                <h2>Edit Mode </h2>
+                <p>
+                    (Close Edit Mode to mark items as bought) 
+                    <button onclick="toggleEditor()">return</button>
+                </p>
             </div>
     
         </div>
@@ -32,9 +35,9 @@
             </div>
                     
             <div class="columns-two"> 
-                <button id= "showInputBtn" onclick="showInput()">Add Food</button> 
-                <button onclick="clearList()">Delete List</button> 
-                <button id="editBtn" onclick="toggleEditor()">Edit</button>
+                <button id="showInputBtn" onclick="showInput()">Add Food</button> 
+                <button id="deleteListBtn" onclick="clearList()">Delete List</button> 
+                <button onclick="toggleEditor()">Edit</button>
             </div>  
         </main>
 
