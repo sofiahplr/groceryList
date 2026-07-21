@@ -104,8 +104,17 @@ function createListItem(name, qty, memo, bought = false) {
     // swipe feature 
     addSwipeFeature(topLayer);
 
-    // add wrapper to ul
-    document.getElementById("firstList").appendChild(listItem);
+    // add wrapper to ul (above bought items)
+    const list = document.getElementById("firstList");
+    const firstBoughtItem = list.querySelector(".topLayer.bought");
+
+   if (bought) {
+        list.appendChild(listItem);
+    } else if (firstBoughtItem) {
+        list.insertBefore(listItem, firstBoughtItem.parentElement);
+    } else {
+        list.appendChild(listItem);
+    }
 }
 
 function updateItemDisplay(topLayer) {
@@ -129,12 +138,25 @@ document.querySelectorAll("#itemToAdd, #itemQty").forEach(input => {
     });
 });
 
-function markAsBought(topLayer) {
-    if (topLayer.moved) {
-        topLayer.moved = false;
+function markAsBought(clickedItem) {
+    if (clickedItem.moved) {
+        clickedItem.moved = false;
         return;
     }
-    topLayer.classList.toggle("bought");
+    clickedItem.classList.toggle("bought");
+
+    // moving elements down when bought, up when unbought
+    const list = document.getElementById("firstList")
+    const firstBoughtItem = list.querySelector(".topLayer.bought");
+    const LiClickedItem = clickedItem.parentElement;
+
+    if(clickedItem.classList.contains("bought")) {
+        list.appendChild(LiClickedItem);
+    } else { //unbought
+        if(firstBoughtItem) {
+            list.insertBefore(LiClickedItem,firstBoughtItem.parentElement);
+        }
+    }
 }
 
 function addSwipeFeature(topLayer) {
