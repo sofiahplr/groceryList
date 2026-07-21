@@ -22,10 +22,7 @@ function addItem() {
     createListItem(name, qty, memo);
     saveList();
 
-    // clear input
-    nameInput.value = "";
-    qtyInput.value = "";
-    memoInput.value = "";
+    clearInput();
 }
 
 function isDuplicate(name, itemToIgnore = null) {
@@ -146,15 +143,15 @@ function markAsBought(clickedItem) {
     clickedItem.classList.toggle("bought");
 
     // moving elements down when bought, up when unbought
-    const list = document.getElementById("firstList")
+    const list = document.getElementById("firstList");
     const firstBoughtItem = list.querySelector(".topLayer.bought");
-    const LiClickedItem = clickedItem.parentElement;
+    const liClickedItem = clickedItem.parentElement;
 
     if(clickedItem.classList.contains("bought")) {
-        list.appendChild(LiClickedItem);
+        list.appendChild(liClickedItem);
     } else { //unbought
         if(firstBoughtItem) {
-            list.insertBefore(LiClickedItem,firstBoughtItem.parentElement);
+            list.insertBefore(liClickedItem,firstBoughtItem.parentElement);
         }
     }
 }
@@ -211,7 +208,7 @@ function addSwipeFeature(topLayer) {
 
         const distance = e.clientX - startPos;
 
-        if (distance < -50) {
+        if (distance < -40) {
             if(topLayer === currentEditingItem) {
                 currentEditingItem = null;
             }

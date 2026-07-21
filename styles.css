@@ -21,12 +21,6 @@ ul {
 
     user-select: none; /* prevents blue selection from mouse*/
     -webkit-user-select: none; /* same as above but Safari */
-    -ms-user-select: none;     /* ^ old Edge/IE */
-
-    -webkit-mask-image: linear-gradient(to right, black 100%, black 100%);
-    mask-image: linear-gradient(to right, black 100%, black 100%);
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
 }
 
 .topLayer.bought {
@@ -131,10 +125,6 @@ input[type="number"] {
     border: 2px dotted rgb(255, 255, 255);
 }
 
-#editForm.hidden {
-    display: none;
-}
-
 #editForm:not(.hidden) {
     display: flex;
 }
@@ -201,10 +191,6 @@ input[type="number"] {
     gap: 7px;
 }
 
-.groceryInput.hidden {
-    display:none;
-}
-
 #itemToAdd,
 #itemQty,
 #itemMemo {
@@ -215,4 +201,8 @@ input[type="number"] {
 
 #mainScreen:has(#editForm:not(.hidden)) .topLayer:hover {
     background-color: rgb(221, 200, 221);
+}
+
+.hidden {
+    display: none;
 }
