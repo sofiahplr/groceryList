@@ -26,7 +26,7 @@
             <div class="columns"> 
                 <div class="groceryInput hidden">
                     <input id="itemToAdd" type="text" placeholder="Enter item">
-                    <input id="itemQty" type="number" min="0" placeholder="Qty">
+                    <input id="itemQty" type="number" min="1" placeholder="Qty">
                     <textarea id="itemMemo" placeholder="Notes"></textarea>
                     <button id="addItemBtn" onclick="addItem()">➕</button>
                     <button id="clearInputBtn" onclick="clearInput()">X</button>
@@ -46,7 +46,7 @@
             <input id="editName" type="text" placeholder="Enter item" >
 
             <label for="editQty">Item Qty</label>
-            <input id="editQty" type="number" min="0" placeholder="Qty">
+            <input id="editQty" type="number" min="1" placeholder="Qty">
 
             <label for="editMemo">Item Memo</label>
             <textarea id="editMemo" placeholder="Notes"></textarea>

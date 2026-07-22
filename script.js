@@ -45,7 +45,6 @@ function isDuplicate(name, itemToIgnore = null) {
     return false;
 }
 
-// split into diff funcs
 function createListItem(name, qty, memo, bought = false) {
     // create wrapper
     const listItem = document.createElement("li");
@@ -211,6 +210,7 @@ function addSwipeFeature(topLayer) {
         if (distance < -40) {
             if(topLayer === currentEditingItem) {
                 currentEditingItem = null;
+                clearEditForm();
             }
             topLayer.parentElement.remove(); // remove wrapper
             saveList();
@@ -253,10 +253,7 @@ function clearList() {
     if (yes) {
         document.getElementById("firstList").innerHTML = "";
         
-        document.getElementById("editName").value = "";
-        document.getElementById("editQty").value = "";
-        document.getElementById("editMemo").value = "";
-
+        clearEditForm();
         currentEditingItem = null;
 
         saveList();
@@ -376,4 +373,10 @@ function toggleEditor() {
 function clearInput() {
     document.querySelectorAll(".groceryInput input, .groceryInput textarea")
         .forEach(input => input.value = "");
+}
+
+function clearEditForm() {
+    document.getElementById("editName").value = "";
+    document.getElementById("editQty").value = "";
+    document.getElementById("editMemo").value = "";
 }
