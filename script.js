@@ -1,132 +1,158 @@
-
-// to do: use const and let, lessen var 
-
 let editMode = false;
 let currentEditingItem = null;
 
-// Add item to List
-// get the element in input, turn it into a text, make a list item
-// make list item and append text into li (ex. <li>itemText</li>)
-// now add that list element and append to the unorderedlist
 function addItem() {
-    var nameInput = document.getElementById("itemToAdd");
-    var qtyInput = document.getElementById("itemQty");
-    var memoInput = document.getElementById("itemMemo");
+    const nameInput = document.getElementById("itemToAdd");
+    const qtyInput = document.getElementById("itemQty");
+    const memoInput = document.getElementById("itemMemo");
 
-    var name = nameInput.value.trim();
-    var qty = qtyInput.value;
-    var memo = memoInput.value.trim();
+    const name = nameInput.value.trim();
+    const qty = qtyInput.value;
+    const memo = memoInput.value.trim();
 
     // check if its empty
     if (!name) {
         alert("Please enter an item");
         return;
-    }
-
-    // checks for duplicates
-    const allItemNames = document.querySelectorAll(".item-name");
-    const currentItemName = name.toLowerCase();
-    for (let i = 0; i < allItemNames.length; i++) {
-        if (allItemNames[i].textContent.trim().toLowerCase() === currentItemName) {
-            alert("This is already on the list");
-            return;
-        }
+    } else if (isDuplicate(name)) {
+        alert("This is already on the list");
+        return;
     }
 
     createListItem(name, qty, memo);
     saveList();
 
-    // clear input
-    nameInput.value = "";
-    qtyInput.value = "";
-    memoInput.value = "";
+    clearInput();
 }
 
-// split into diff funcs
+function isDuplicate(name, itemToIgnore = null) {
+    const allItems = document.querySelectorAll(".topLayer");
+    const currentItemName = name.trim().toLowerCase();
+
+    for (let i = 0; i < allItems.length; i++) {
+        if (allItems[i] === itemToIgnore) {
+            continue;
+        }
+
+        const existingName =
+            allItems[i].dataset.name.trim().toLowerCase();
+
+        if (existingName === currentItemName) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function createListItem(name, qty, memo, bought = false) {
     // create wrapper
-    var listItem = document.createElement("li");
+    const listItem = document.createElement("li");
     listItem.classList.add("swipeWrapper");
 
     // red background behind item
-    var deleteBackground = document.createElement("div");
+    const deleteBackground = document.createElement("div");
     deleteBackground.classList.add("deleteBg");
     deleteBackground.textContent = "DELETE";
 
     // create item
-    var topLayer = document.createElement("div");
+    const topLayer = document.createElement("div");
     topLayer.classList.add("topLayer");
 
     topLayer.dataset.name = name;
     topLayer.dataset.qty = qty;
     topLayer.dataset.memo = memo;
 
-    // display
-    topLayer.textContent = "";
-
-    let nameSpan = document.createElement("span");
+    const nameSpan = document.createElement("span");
     nameSpan.classList.add("item-name");
-    nameSpan.textContent = name;
 
-    let qtySpan = document.createElement("span");
+    const qtySpan = document.createElement("span");
     qtySpan.classList.add("item-qty");
-    qtySpan.textContent = qty ? ` x${qty}` : "";
 
-    let memoSpan = document.createElement("span");
+    const memoSpan = document.createElement("span");
     memoSpan.classList.add("item-memo");
-    memoSpan.textContent = memo ? memo : "";
 
     topLayer.appendChild(nameSpan);
     topLayer.appendChild(qtySpan);
     topLayer.appendChild(memoSpan);
 
+    updateItemDisplay(topLayer);
+
+    // To keep state for loadList
     if (bought) {
         topLayer.classList.add("bought");
     }
     
-
     // build structure
     listItem.appendChild(deleteBackground);
     listItem.appendChild(topLayer);
 
-    // adding marking when items are bought
-    topLayer.onclick = function () {
+    // adding marking when items are bought and selecting item in edit mode
+    topLayer.addEventListener("click", function() {
         if (editMode) {
-            selectEditItem(this);
-        } else {
-            markAsBought(this);
-            saveList();
-        }
-    }
+                selectEditItem(this);
+            } else {
+                markAsBought(this);
+                saveList();
+            }
+    });
 
     // swipe feature 
     addSwipeFeature(topLayer);
 
-    // add wrapper to ul
-    document.getElementById("firstList").appendChild(listItem);
+    // add wrapper to ul (above bought items)
+    const list = document.getElementById("firstList");
+    const firstBoughtItem = list.querySelector(".topLayer.bought");
+
+   if (bought) {
+        list.appendChild(listItem);
+    } else if (firstBoughtItem) {
+        list.insertBefore(listItem, firstBoughtItem.parentElement);
+    } else {
+        list.appendChild(listItem);
+    }
+}
+
+function updateItemDisplay(topLayer) {
+    topLayer.querySelector(".item-name").textContent = 
+        topLayer.dataset.name;
+    
+    topLayer.querySelector(".item-qty").textContent =
+        topLayer.dataset.qty ? ` x${topLayer.dataset.qty}` : "";
+
+    topLayer.querySelector(".item-memo").textContent =
+        topLayer.dataset.memo;
 }
 
 window.addEventListener("load", loadList);
 
-/* To do: combine these three listeners so not repetitive */
-document.getElementById("itemToAdd").addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-        addItem();
-    }
-})
+document.querySelectorAll("#itemToAdd, #itemQty").forEach(input => {
+    input.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            addItem();
+        }
+    });
+});
 
-document.getElementById("itemQty").addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-        addItem();
-    }
-})
-
-function markAsBought(topLayer) {
-    if (topLayer.moved) {
-        topLayer.moved = false;
+function markAsBought(clickedItem) {
+    if (clickedItem.moved) {
+        clickedItem.moved = false;
         return;
     }
-    topLayer.classList.toggle("bought");
+    clickedItem.classList.toggle("bought");
+
+    // moving elements down when bought, up when unbought
+    const list = document.getElementById("firstList");
+    const firstBoughtItem = list.querySelector(".topLayer.bought");
+    const liClickedItem = clickedItem.parentElement;
+
+    if(clickedItem.classList.contains("bought")) {
+        list.appendChild(liClickedItem);
+    } else { //unbought
+        if(firstBoughtItem) {
+            list.insertBefore(liClickedItem,firstBoughtItem.parentElement);
+        }
+    }
 }
 
 function addSwipeFeature(topLayer) {
@@ -142,19 +168,19 @@ function addSwipeFeature(topLayer) {
     topLayer.addEventListener("pointermove", (e) => {
         if (!isDragging) return;
 
-        let currentPos = e.clientX;
+        const currentPos = e.clientX;
         let distance = currentPos - startPos;
         //limit swipe to the left
         distance = Math.max(distance, -70);
 
         if (distance < 0) {
-            if (Math.abs(distance) > 10) {
+            const abs = Math.abs(distance);
+
+            if (abs > 10) {
                 topLayer.moved = true;
             }
 
             topLayer.style.transform = `translateX(${distance}px)`;
-
-            let abs = Math.abs(distance);
 
             const fadeStart = 25;
             const fadeRange = 50;
@@ -167,7 +193,7 @@ function addSwipeFeature(topLayer) {
 
             progress = Math.pow(progress, 1.8);
 
-            let fadePoint = 100 - progress * 90;
+            const fadePoint = 100 - progress * 90;
 
             topLayer.style.webkitMaskImage =
             `linear-gradient(to right, black ${fadePoint}%, transparent 100%)`;
@@ -179,9 +205,13 @@ function addSwipeFeature(topLayer) {
 
         isDragging = false;
 
-        let distance = e.clientX - startPos;
+        const distance = e.clientX - startPos;
 
-        if (distance < -50) {
+        if (distance < -40) {
+            if(topLayer === currentEditingItem) {
+                currentEditingItem = null;
+                clearEditForm();
+            }
             topLayer.parentElement.remove(); // remove wrapper
             saveList();
         } else {
@@ -193,35 +223,39 @@ function addSwipeFeature(topLayer) {
 
     topLayer.addEventListener("pointercancel", () => {
         isDragging = false;
+        topLayer.moved = false;
         topLayer.style.transform = "translateX(0px)";
+        topLayer.style.webkitMaskImage = "";
     });
 }
 
-function showInput() {
-    var inputs = document.querySelectorAll(".groceryInput");
-    var showInp = document.getElementById("showInputBtn");
+function showInput(shouldShow) {
+    const inputs = document.querySelector(".groceryInput");
+    const showInp = document.getElementById("showInputBtn");
 
-    var isHidden = inputs[0].classList.contains("hidden");
+    if(shouldShow === undefined) {
+        inputs.classList.toggle("hidden");
+    } else {
+        inputs.classList.toggle("hidden", !shouldShow)
+    }
 
-    inputs.forEach(input => {
-        if (isHidden) {
-            input.classList.remove("hidden");
-        } else {
-            input.classList.add("hidden");
-        }
-    });
+    const inputsAreHidden = inputs.classList.contains("hidden");
 
-    showInp.textContent = isHidden ? "Done" : "Add Food";
+    showInp.textContent = inputsAreHidden ? "Add Food" : "Done";
 
-    if (isHidden) {
-        inputs[0].focus();
+    if(!inputsAreHidden) {
+        document.getElementById("itemToAdd").focus();
     }
 }
 
 function clearList() {
-    var yes = confirm("Are you sure you want to delete this list?");
+    const yes = confirm("Are you sure you want to delete this list?");
     if (yes) {
         document.getElementById("firstList").innerHTML = "";
+        
+        clearEditForm();
+        currentEditingItem = null;
+
         saveList();
     }
 }
@@ -271,9 +305,9 @@ function selectEditItem(groceryItem) {
 
     currentEditingItem.classList.add("editing-selected");
 
-    document.getElementById("editName").value = groceryItem.dataset.name;
-    document.getElementById("editQty").value = groceryItem.dataset.qty;
-    document.getElementById("editMemo").value = groceryItem.dataset.memo;
+    document.getElementById("editName").value = currentEditingItem.dataset.name;
+    document.getElementById("editQty").value = currentEditingItem.dataset.qty;
+    document.getElementById("editMemo").value = currentEditingItem.dataset.memo;
 }
 
 function saveEditedItem() {
@@ -289,15 +323,16 @@ function saveEditedItem() {
     if (!newName) {
         alert("Item name cannot be empty");
         return;
+    } else if (isDuplicate(newName, currentEditingItem)) {
+        alert("This is already on the list");
+        return;
     }
 
     currentEditingItem.dataset.name = newName;
     currentEditingItem.dataset.qty = newQty;
     currentEditingItem.dataset.memo = newMemo;
 
-    currentEditingItem.querySelector(".item-name").textContent = newName;
-    currentEditingItem.querySelector(".item-qty").textContent = newQty ? ` x${newQty}` : "";
-    currentEditingItem.querySelector(".item-memo").textContent = newMemo;
+    updateItemDisplay(currentEditingItem);
 
     saveList();
 }
@@ -305,29 +340,43 @@ function saveEditedItem() {
 function toggleEditor() {
     document.getElementById("editMode").classList.toggle("hidden");
 
-    let form = document.getElementById("editForm");
+    const form = document.getElementById("editForm");
     form.classList.toggle("hidden");
 
-    let btn = document.getElementById("editBtn");
-
-    let isHidden = form.classList.contains("hidden");
+    const isHidden = form.classList.contains("hidden");
     editMode = !isHidden;
 
-    btn.textContent = isHidden ? "Edit" : "Close Edit"
+    const sideBtn = document.querySelector(".columns-two");
 
     if (isHidden) {
-        currentEditingItem.classList.remove("editing-selected");
+        sideBtn.classList.remove("hidden");
+
+        if (currentEditingItem) {
+            currentEditingItem.classList.remove("editing-selected");
+        }
+
         currentEditingItem = null;
     } else {
+
+        showInput(false);
+        sideBtn.classList.add("hidden");
+
         const firstItem = document.querySelector(".topLayer");
 
         if (firstItem) {
             selectEditItem(firstItem);
         }
+
     }
 }
 
 function clearInput() {
     document.querySelectorAll(".groceryInput input, .groceryInput textarea")
         .forEach(input => input.value = "");
+}
+
+function clearEditForm() {
+    document.getElementById("editName").value = "";
+    document.getElementById("editQty").value = "";
+    document.getElementById("editMemo").value = "";
 }
