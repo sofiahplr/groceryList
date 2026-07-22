@@ -50,10 +50,6 @@ ul {
     gap: 5px;
 }
 
-.hidden {
-    display: none;
-}
-
 .columns-two button {
     font-size: medium;
 }
@@ -208,5 +204,5 @@ input[type="number"] {
 }
 
 button {
-    cursor:pointer;
+    cursor: pointer;
 }
